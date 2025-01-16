@@ -1,65 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Display</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-
-        #fileContent {
-            margin-top: 20px;
-            white-space: pre-wrap;
-            text-align: left;
-            display: inline-block;
-            background-color: #f4f4f4;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button Click Redirect</title>
 </head>
-
 <body>
+  <h1>Click the Button to Navigate</h1>
+  <button onclick="redirectToImagePage()">Go to Image Page</button>
 
-    <h1>File Display</h1>
-    <button id="chooseFileBtn">Choose File</button>
-    <input type="file" id="fileInput" style="display: none;">
-    <div id="fileInfo"></div>
-    <div id="fileContent"></div>
-
-    <script>
-        const chooseFileBtn = document.getElementById('chooseFileBtn');
-        const fileInput = document.getElementById('fileInput');
-        const fileInfo = document.getElementById('fileInfo');
-        const fileContent = document.getElementById('fileContent');
-
-        chooseFileBtn.addEventListener('click', () => {
-            fileInput.click();
-        });
-
-        fileInput.addEventListener('change', () => {
-            const file = fileInput.files[0];
-            if (file) {
-                fileInfo.textContent = `File Name: ${file.name}`;
-
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    fileContent.textContent = e.target.result;
-                };
-                reader.readAsText(file); // Read the file as text
-            } else {
-                fileInfo.textContent = 'No file selected.';
-                fileContent.textContent = '';
-            }
-        });
-    </script>
-
+  <script>
+    function redirectToImagePage() {
+      window.location.href = 'fileImage.html'; // Redirect to fileImage.html
+    }
+  </script>
 </body>
-
 </html>

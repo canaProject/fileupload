@@ -1,0 +1,145 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Selection Demo</title>
+    <style>
+        #imageResult {
+            display: none;
+            width: 100%;
+            max-width: 300px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <br>
+
+    <button onclick="captureImage()">Capture Image from Camera</button>
+    <br>
+
+    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+
+    <img id="imageResult" alt="Selected Image">
+    <P></P>
+
+    <script>
+
+        function captureImage() {
+            window.flutter_inappwebview.callHandler('captureImageFromCamera');
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                console.error('No file selected');
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const dataURL = e.target.result;
+                const output = document.getElementById('imageResult');
+                if (!output) {
+                    console.error('Image result element not found');
+                    return;
+                }
+                output.src = dataURL;
+                output.style.display = 'block';
+            };
+
+            reader.onerror = function(e) {
+                console.error('FileReader error:', e.target.error);
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function handleImage(base64Image) {
+            const output = document.getElementById('imageResult');
+            if (!output) {
+                console.error('Image result element not found');
+                return;
+            }
+            console.log(base64Image)
+            output.src = 'data:image/png;base64,' + base64Image; // Adjust MIME type as needed
+            output.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+ -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Image Selection Demo</title>
+     <style>
+         #imageResult {
+             display: none;
+             width: 100%;
+             max-width: 300px;
+             margin-top: 20px;
+         }
+     </style>
+ </head>
+ <body>
+ 
+     <br>
+ 
+     <button onclick="captureImage()">Capture Image from Camera</button>
+     <br>
+ 
+     <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+ 
+     <img id="imageResult" alt="Selected Image">
+     <p id="base64ImageDisplay"></p> <!-- Added id for displaying base64 -->
+ 
+     <script>
+         function captureImage() {
+             window.flutter_inappwebview.callHandler('captureImageFromCamera');
+         }
+ 
+         function handleFileSelect(event) {
+             const file = event.target.files[0];
+             if (!file) {
+                 console.error('No file selected');
+                 return;
+             }
+ 
+             const reader = new FileReader();
+ 
+             reader.onload = function(e) {
+                 const dataURL = e.target.result;
+                 const output = document.getElementById('imageResult');
+                 if (!output) {
+                     console.error('Image result element not found');
+                     return;
+                 }
+                 output.src = dataURL;
+                 output.style.display = 'block';
+             };
+ 
+             reader.onerror = function(e) {
+                 console.error('FileReader error:', e.target.error);
+             };
+ 
+             reader.readAsDataURL(file);
+         }
+ 
+         function handleImage(base64Image) {
+             const output = document.getElementById('base64ImageDisplay'); // Select the <p> tag
+             if (!output) {
+                 console.error('Base64 image display element not found');
+                 return;
+             }
+             output.textContent = base64Image; // Display base64 string in <p> tag
+         }
+     </script>
+ </body>
+ </html>
+ 
