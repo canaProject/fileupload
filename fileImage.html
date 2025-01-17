@@ -77,102 +77,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Selection Demo</title>
+    <title>Text and Image Display Demo</title>
     <style>
-        #imageResult {
-            display: none;
-            width: 100%;
-            max-width: 300px;
+        #displayText {
             margin-top: 20px;
+            font-size: 16px;
+            color: #333;
         }
 
-        #base64ImageDisplay {
+        #displayImage {
             margin-top: 20px;
-            white-space: pre-wrap; /* Ensure base64 string wraps */
-            word-wrap: break-word;
-            max-width: 100%;
-            font-family: monospace; /* Optional: makes base64 easier to read */
-            font-size: 12px;
+            display: none; /* Hide the image initially */
+            max-width: 300px;
+            width: 100%;
         }
     </style>
 </head>
 <body>
 
-    <br>
-
-    <button onclick="captureImage()">Capture Image from Camera</button>
-    <br>
-
-    <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
-    <br>
-
-    <img id="imageResult" alt="Selected Image">
-    <p id="base64ImageDisplay"></p> <!-- Added id for displaying base64 -->
+    <button onclick="requestData()">Request Data from Flutter</button>
+    <p id="displayText">No data received yet.</p> <!-- Placeholder for text -->
+    <img id="displayImage" alt="Image from Base64 String"> <!-- Placeholder for image -->
 
     <script>
-        // Function to invoke Flutter to capture image from camera
-        function captureImage() {
-            window.flutter_inappwebview.callHandler('captureImageFromCamera');
-        }
+        function requestData() {
+            // Call the Flutter handler to request a string
+            window.flutter_inappwebview.callHandler('sendStringToWebView').then(function(data) {
+                const outputText = document.getElementById('displayText');
+                const outputImage = document.getElementById('displayImage');
 
-        // Function to handle the image file selection from the file input
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (!file) {
-                console.error('No file selected');
-                return;
-            }
-
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                const dataURL = e.target.result;
-                const output = document.getElementById('imageResult');
-                if (!output) {
-                    console.error('Image result element not found');
-                    return;
+                // Display the string as text
+                if (outputText) {
+                    outputText.textContent = data || "No data received.";
                 }
-                output.src = dataURL;
-                output.style.display = 'block';
 
-                // Display base64 string in <p> tag
-                const base64Image = dataURL.split(',')[1]; // Extract base64 part of the data URL
-                displayBase64(base64Image);
-            };
-
-            reader.onerror = function(e) {
-                console.error('FileReader error:', e.target.error);
-            };
-
-            reader.readAsDataURL(file);
-        }
-
-        // Function to handle the base64 string from Flutter and display it
-        function handleImage(base64Image) {
-            const output = document.getElementById('imageResult');
-            const base64Display = document.getElementById('base64ImageDisplay');
-            
-            if (!output || !base64Display) {
-                console.error('Required elements not found');
-                return;
-            }
-
-            // Display the base64 string in the <p> tag
-            base64Display.textContent = base64Image;
-
-            // Display the image in the <img> tag using the base64 string
-            output.src = `data:image/png;base64,${base64Image}`;
-            output.style.display = 'block';
-        }
-
-        // Function to display base64 string in <p> tag
-        function displayBase64(base64) {
-            const base64Display = document.getElementById('base64ImageDisplay');
-            if (base64Display) {
-                base64Display.textContent = base64; // Display base64 string in <p> tag
-            }
+                // Try to display the string as an image (Base64)
+                if (outputImage) {
+                    try {
+                        outputImage.src = `data:image/png;base64,${data}`;
+                        outputImage.style.display = 'block'; // Show the image
+                    } catch (error) {
+                        console.error('Failed to render image from Base64:', error);
+                        outputImage.style.display = 'none'; // Hide the image if it's not valid
+                    }
+                }
+            });
         }
     </script>
-
 </body>
 </html>
