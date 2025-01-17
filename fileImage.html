@@ -85,6 +85,15 @@
             max-width: 300px;
             margin-top: 20px;
         }
+
+        #base64ImageDisplay {
+            margin-top: 20px;
+            white-space: pre-wrap; /* Ensure base64 string wraps */
+            word-wrap: break-word;
+            max-width: 100%;
+            font-family: monospace; /* Optional: makes base64 easier to read */
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -125,6 +134,10 @@
                 }
                 output.src = dataURL;
                 output.style.display = 'block';
+
+                // Display base64 string in <p> tag
+                const base64Image = dataURL.split(',')[1]; // Extract base64 part of the data URL
+                displayBase64(base64Image);
             };
 
             reader.onerror = function(e) {
@@ -134,7 +147,7 @@
             reader.readAsDataURL(file);
         }
 
-        // Function to display the base64 image string and image preview
+        // Function to handle the base64 string from Flutter and display it
         function handleImage(base64Image) {
             const output = document.getElementById('imageResult');
             const base64Display = document.getElementById('base64ImageDisplay');
@@ -147,12 +160,19 @@
             // Display the base64 string in the <p> tag
             base64Display.textContent = base64Image;
 
-            // Display the image in the <img> tag
+            // Display the image in the <img> tag using the base64 string
             output.src = `data:image/png;base64,${base64Image}`;
             output.style.display = 'block';
+        }
+
+        // Function to display base64 string in <p> tag
+        function displayBase64(base64) {
+            const base64Display = document.getElementById('base64ImageDisplay');
+            if (base64Display) {
+                base64Display.textContent = base64; // Display base64 string in <p> tag
+            }
         }
     </script>
 
 </body>
 </html>
-
